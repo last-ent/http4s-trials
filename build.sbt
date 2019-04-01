@@ -11,8 +11,7 @@ scalacOptions ++= Seq(
   "-Xfatal-warnings", // New lines for each options
   "-deprecation",
   "-unchecked",
-  "-language:higherKinds",
-  "-Ywarn - unused: imports, locals"
+  "-language:higherKinds"
 )
 
 libraryDependencies ++= Seq(
