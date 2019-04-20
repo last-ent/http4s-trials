@@ -3,6 +3,7 @@ name := "http4s2"
 version := "0.1"
 
 scalaVersion := "2.12.8"
+ensimeScalaVersion in ThisBuild := "2.12.8"
 
 scalacOptions ++= Seq(
   "-Ypartial-unification",
@@ -14,7 +15,12 @@ scalacOptions ++= Seq(
   "-language:higherKinds"
 )
 
+val doobieVersion = "0.6.0"
+
 libraryDependencies ++= Seq(
+  "org.tpolecat" %% "doobie-core"     % doobieVersion,
+  "org.tpolecat" %% "doobie-postgres" % doobieVersion,
+  "org.tpolecat" %% "doobie-specs2"   % doobieVersion,
   "org.slf4j" % "slf4j-simple" % "1.7.26",
   "org.http4s" %% "http4s-dsl" % "0.20.0-M7",
   "org.http4s" %% "http4s-blaze-server" % "0.20.0-M7"

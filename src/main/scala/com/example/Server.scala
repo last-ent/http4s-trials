@@ -13,7 +13,7 @@ import org.http4s.server.blaze.BlazeServerBuilder
 object Server extends IOApp {
   val logger = getLogger("Simple Log")
 
-  val services = Injector.wrap(HelloRoute.service) <+> AuthClient.middleware(UserRoute.service)
+  val services = Injector.wrap(HelloRoute.service) <+> AuthClient.middleware[IO](UserRoute.service)
 
   val httpApp = Router("/" -> services).orNotFound
 

@@ -6,8 +6,9 @@ import org.http4s._
 import org.http4s.dsl.io._
 
 object UserRoute {
-  val service: AuthedService[User, IO] =
+  def service[F[_]: Effect]: AuthedService[User, F] =
     AuthedService {
-      case GET -> Root / "user" as user => Ok(user.toString + "\n")
+      case GET -> Root / "user" as user => Ok(user.toString + "\n").asInstanceOf[F[Response[F]]]
+      case GET -> Root / "asdf" as user => false
     }
 }
