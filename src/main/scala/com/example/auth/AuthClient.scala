@@ -15,6 +15,21 @@ case class User(id: Long, name: String) {
 
 object AuthClient {
 
+  def isAuthorizedF(str: String): IO[User] =
+    str === "Bearer Token" match {
+      case true => IO.pure(User(10, str))
+      case false => IO.raiseError(new RuntimeException("Invalid Token."))
+    }
+
+  def authUserF(request: Request[IO]): IO[User] =
+    request
+      .headers
+      .get(Authorization) match {
+      case None => IO.raiseError(new RuntimeException("Couldn't find an Authorization Header"))
+      case Some(header) => isAuthorizedF(header.value)
+    }
+
+
   def isAuthorized(s: String): IO[Either[String, User]] =
     s === "Bearer Token" match {
       case true => IO.pure(Right(User(10, s)))
