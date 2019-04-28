@@ -5,6 +5,7 @@ import cats.effect._
 import org.http4s.{Header, HttpRoutes, Request, Response}
 import org.log4s.{Logger, getLogger}
 import org.http4s.dsl.io._
+
 object Injector {
   val logger: Logger = getLogger("Simple Log")
 

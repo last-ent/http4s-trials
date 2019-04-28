@@ -108,3 +108,5 @@ project/plugins/project/
 project/target
 target
 project/project/target
+.ensime
+.ensime_cache
