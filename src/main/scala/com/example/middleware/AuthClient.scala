@@ -1,4 +1,4 @@
-package com.example.auth
+package com.example.middleware
 
 import cats.data._
 import cats.effect._
@@ -25,7 +25,7 @@ object AuthClient {
     request
       .headers
       .get(Authorization) match {
-      case None => IO.raiseError(new RuntimeException("Couldn't find an Authorization Header"))
+      case None => IO.raiseError(new RuntimeException("AuthF: Couldn't find an Authorization Header"))
       case Some(header) => isAuthorizedF(header.value)
     }
 
@@ -40,7 +40,7 @@ object AuthClient {
     request
       .headers
       .get(Authorization) match {
-      case None => IO.pure(Left("Couldn't find an Authorization Header"))
+      case None => IO.pure(Left("authUser: Couldn't find an Authorization Header"))
       case Some(header) => isAuthorized(header.value)
     }
   })

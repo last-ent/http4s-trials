@@ -1,7 +1,7 @@
 package com.example.user
 
 import cats.effect._
-import com.example.auth.User
+import com.example.middleware.User
 import org.http4s._
 import org.http4s.dsl.io._
 

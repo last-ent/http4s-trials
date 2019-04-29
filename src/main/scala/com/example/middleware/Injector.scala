@@ -1,4 +1,4 @@
-package com.example.auth
+package com.example.middleware
 
 import cats.data.{Kleisli, OptionT}
 import cats.effect._
@@ -21,7 +21,6 @@ object Injector {
     }
   }
 }
-
 
 object ErrorHandlers {
   val handlers: Throwable => IO[Option[Response[IO]]] = {

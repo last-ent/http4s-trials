@@ -4,6 +4,8 @@ version := "0.1"
 
 scalaVersion in ThisBuild := "2.12.8"
 
+ensimeServerFindUsages in ThisBuild := true
+
 scalacOptions ++= Seq(
   "-Ypartial-unification",
   "-encoding",
