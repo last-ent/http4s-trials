@@ -2,6 +2,7 @@ package com.example
 
 import cats.data.Kleisli
 import com.example.middleware.CallTracer
+import io.jaegertracing.Configuration
 import org.log4s.{Logger, getLogger}
 import cats.effect._
 import cats.implicits._
@@ -15,13 +16,24 @@ import org.http4s.server.blaze.BlazeServerBuilder
 import com.example.opentracing.MyOpenTracer
 import io.opentracing.Tracer
 import com.example.tracedcall.TracedRoute
+import io.opentracing.mock.MockTracer
+import io.jaegertracing.Configuration.{SamplerConfiguration, ReporterConfiguration}
+import io.jaegertracing.Configuration
 
 object Server extends IOApp {
   val logger: Logger = getLogger("Simple Log")
 
-  val tracer: Tracer = MyOpenTracer.getTracer("trial-server")
+  def getTracer(): Tracer = {
+    val config = Configuration.fromEnv("trail-server")
+    println(config.getSampler.getParam)
+    val samplerConfig = SamplerConfiguration.fromEnv().withType("const").withParam(1)
+    val reporterConfig = ReporterConfiguration.fromEnv().withLogSpans(true)
+    config.withSampler(samplerConfig).withReporter(reporterConfig).getTracer
+  }
 
-  val services = Injector.protect(Injector.wrap(HelloRoute.service)) <+> CallTracer.trace(tracer, MyOpenTracer)(TracedRoute.service) <+> AuthClient.middleware(UserRoute.service) 
+  val tracer: Tracer = getTracer
+
+  val services = Injector.protect(Injector.wrap(HelloRoute.service)) <+> CallTracer.trace(new MyOpenTracer(tracer))(TracedRoute.service) <+> AuthClient.middleware(UserRoute.service)
   val httpApp: Kleisli[IO, Request[IO], Response[IO]] = Router("/" -> services).orNotFound
 
   def run(args: List[String]): IO[ExitCode] =

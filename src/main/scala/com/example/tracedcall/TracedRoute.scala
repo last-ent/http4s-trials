@@ -7,7 +7,9 @@ import org.http4s._
 import org.http4s.dsl.io._
 
 object TracedRoute {
-  def service(rootSpan: Span, tracer: Tracer, openTracer: OpenTracer) = HttpRoutes.of[IO] {
-    case req @ GET -> Root / "name" / name => Ok(s"""{"name": $name}""")
+  def service(rootSpan: Span, openTracer: OpenTracer) = HttpRoutes.of[IO] {
+    case req @ GET -> Root / "name" / name =>
+      openTracer.createChildSpan("call_name", rootSpan).finish()
+      Ok(s"""{"name": $name}""")
   }
 }
